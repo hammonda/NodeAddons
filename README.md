@@ -1,4 +1,4 @@
-Node Async Addons
+Node Addons
 =================
 
-A collection of asynchronous addon examples for nodejs
+A collection of addon examples for nodejs
