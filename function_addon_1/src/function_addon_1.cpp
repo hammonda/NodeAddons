@@ -60,6 +60,8 @@ void Work(uv_work_t *req) {
 // Called by the libuv event loop when the Work function is done. This allows
 // the code to clean up any memory allocated.
 void Finish(uv_work_t *req) {
+  v8::HandleScope scope;
+
   baton_t* baton = static_cast<baton_t*>(req->data);
 
   // Create the arguments used to call the callback function.
@@ -79,7 +81,7 @@ void Finish(uv_work_t *req) {
 
   // Invoke the registered callback function.
   v8::TryCatch try_catch;
-  v8::Local<v8::Value> argv[1] = { returnObj };
+  v8::Local<v8::Value> argv[1] = { returnObj };  
   baton->cb_fn->Call(v8::Context::GetCurrent()->Global(), 1, argv);
 
   // Clean up.
@@ -131,7 +133,7 @@ v8::Handle<v8::Value> AsynCall (const v8::Arguments &args) {
   return scope.Close(v8::Undefined());
 }
 
-// Called when require('async_addon') is called in JS. Registers the nthPrime JS
+// Called when require('function_addon_1') is called in JS. Registers the nthPrime JS
 // function and links it with the AyncCall C++ function.
 static void Init (v8::Handle<v8::Object> target) {
   target->Set(v8::String::NewSymbol("getPrimes"),
