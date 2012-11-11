@@ -71,6 +71,7 @@ void Work(uv_work_t *req) {
 void Finish(uv_work_t *req) {
   assert(pthread_self() == node_thread);
 
+  HandleScope scope;
   async_call_t* async_call = (async_call_t*)req->data;
 
   // Create the arguments used to call the callback function.

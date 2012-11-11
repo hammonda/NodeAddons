@@ -106,6 +106,7 @@ void NthPrime::getNthPrime_start (uv_work_t *req) {
 
 void NthPrime::getNthPrime_finish (uv_work_t *req) {
   getNthPrime_t* baton = (getNthPrime_t*)req->data;
+  v8::HandleScope scope;
 
   // Create the arguments used to call the callback function.
   v8::Local<v8::Value> argv[3];
