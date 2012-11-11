@@ -45,7 +45,7 @@ uint32_t nthPrime (uint32_t n) {
 // Called by the libuv event loop when its ready to do the work. In this case,
 // call the nthPrime C++ function.
 void Work(uv_work_t *req) {
-  baton_t* baton = (baton_t*)req->data;
+  baton_t* baton = static_cast<baton_t*>(req->data);
   // Calculate the primes.
   if (baton->size < 1) {
     baton->results = NULL;
