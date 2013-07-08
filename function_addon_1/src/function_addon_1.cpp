@@ -59,7 +59,7 @@ void Work(uv_work_t *req) {
 
 // Called by the libuv event loop when the Work function is done. This allows
 // the code to clean up any memory allocated.
-void Finish(uv_work_t *req) {
+void Finish(uv_work_t *req, int32_t status) {
   v8::HandleScope scope;
 
   baton_t* baton = static_cast<baton_t*>(req->data);
@@ -73,7 +73,7 @@ void Finish(uv_work_t *req) {
     results = v8::Array::New(baton->size);
     for (int32_t i = 0; i < baton->size; ++i) {
       results->Set(i, v8::Integer::New(baton->results[i]));
-    }        
+    }
   }
   returnObj->Set(v8::String::New("start"), v8::Integer::New(baton->start));
   returnObj->Set(v8::String::New("size"), v8::Integer::New(baton->size));
@@ -81,7 +81,7 @@ void Finish(uv_work_t *req) {
 
   // Invoke the registered callback function.
   v8::TryCatch try_catch;
-  v8::Local<v8::Value> argv[1] = { returnObj };  
+  v8::Local<v8::Value> argv[1] = { returnObj };
   baton->cb_fn->Call(v8::Context::GetCurrent()->Global(), 1, argv);
 
   // Clean up.
@@ -121,7 +121,7 @@ v8::Handle<v8::Value> AsynCall (const v8::Arguments &args) {
   baton_t* baton = new baton_t;
   baton->start = args[0]->Uint32Value();
   baton->size = 1 + static_cast<int32_t>(args[1]->Uint32Value()) - baton->start;
-  baton->cb_fn = 
+  baton->cb_fn =
     v8::Persistent<v8::Function>::New(v8::Local<v8::Function>::Cast(args[2]));
 
   // Put the C++ work function in the queue to be calculated by the libeio
