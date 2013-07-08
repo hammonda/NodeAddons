@@ -104,7 +104,7 @@ void NthPrime::getNthPrime_start (uv_work_t *req) {
   baton->thread_id = pthread_self();
 }
 
-void NthPrime::getNthPrime_finish (uv_work_t *req) {
+void NthPrime::getNthPrime_finish (uv_work_t *req, int32_t status) {
   getNthPrime_t* baton = (getNthPrime_t*)req->data;
   v8::HandleScope scope;
 

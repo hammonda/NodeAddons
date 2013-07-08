@@ -7,7 +7,6 @@
 #include <uv.h>
 #include <v8.h>
 
-using namespace node;
 using namespace v8;
 
 static pthread_t node_thread;
@@ -68,7 +67,7 @@ void Work(uv_work_t *req) {
 
 // Called by the libuv event loop when the Work function is done. This allows
 // the code to clean up any memory allocated.
-void Finish(uv_work_t *req) {
+void Finish(uv_work_t *req, int32_t status) {
   assert(pthread_self() == node_thread);
 
   HandleScope scope;
@@ -92,7 +91,7 @@ void Finish(uv_work_t *req) {
   free(req);
 
   if (try_catch.HasCaught()) {
-    FatalException(try_catch);
+    node::FatalException(try_catch);
   }
 }
 

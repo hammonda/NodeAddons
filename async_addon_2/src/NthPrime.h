@@ -29,7 +29,7 @@ private:
 
   static v8::Handle<v8::Value> getNthPrime_JS (const v8::Arguments &args);
   static void getNthPrime_start (uv_work_t *req);
-  static void getNthPrime_finish (uv_work_t *req);
+  static void getNthPrime_finish (uv_work_t *req, int32_t status);
 
 };
 
